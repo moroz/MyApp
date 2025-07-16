@@ -1,4 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using MyApp.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options
+        .UseNpgsql(builder.Configuration.GetConnectionString("AppDbContext"))
+        .UseSnakeCaseNamingConvention());
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -21,8 +29,8 @@ app.UseAuthorization();
 app.MapStaticAssets();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 
