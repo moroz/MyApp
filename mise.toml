@@ -1,0 +1,23 @@
+[tools]
+dotnet = "latest"
+
+[tasks."convert_crlf"]
+run = """
+#!/usr/bin/env bash
+
+# Get staged .json, .cs, .csproj files
+files=$(git diff --cached --name-only | grep -E '\\.(json|cs|csproj)$' || true)
+
+if [ -z "$files" ]; then
+    exit 0
+fi
+
+# Process each file
+for file in $files; do
+    if [ -f "$file" ]; then
+        # Convert CRLF to LF
+        sed -i '' 's/\r$//' "$file"
+        git add "$file"
+    fi
+done
+"""
