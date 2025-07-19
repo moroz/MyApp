@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using MyApp.Data;
+using MyApp.Data.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options
-        .UseNpgsql(builder.Configuration.GetConnectionString("AppDbContext"))
+        .UseNpgsql(builder.Configuration.GetConnectionString("AppDbContext"),
+            optionsBuilder => { optionsBuilder.MapEnum<Gender>("gender"); })
         .UseSnakeCaseNamingConvention());
 
 // Add services to the container.
